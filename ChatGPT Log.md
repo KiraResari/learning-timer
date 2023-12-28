@@ -739,3 +739,9 @@ class _LearningTimerState extends State<LearningTimer> {
 Now, the buttons' text doesn't change, and their behavior follows the specified requirements. If you have any further adjustments or questions, feel free to let me know!
 
 ## Result
+
+The buttons work perfectly now, but the timer again stops counting down at 0 and can't display negative numbers anymore.
+
+### Program issues
+
+* The timer can't display negative numbers anymore, and simply stops when reaching 0
