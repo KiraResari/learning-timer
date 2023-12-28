@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-class TimerApp extends StatefulWidget {
+class FlutterBardLearningTimer extends StatefulWidget {
   @override
-  _TimerAppState createState() => _TimerAppState();
+  _FlutterBardLearningTimerState createState() => _FlutterBardLearningTimerState();
 }
 
-class _TimerAppState extends State<TimerApp> {
+class _FlutterBardLearningTimerState extends State<FlutterBardLearningTimer> {
   Timer? _timer;
   int _currentValue = 0;
   bool _isCountingUp = true;
@@ -94,7 +94,7 @@ class _TimerAppState extends State<TimerApp> {
     }
   }
 
-  void _buildButtons() {
+  Widget _buildButtons() {
     List<Widget> buttons = [];
 
     if (_timer == null) {
@@ -129,5 +129,10 @@ class _TimerAppState extends State<TimerApp> {
       onPressed: onPressed,
       child: Text(text),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Placeholder();
   }
 }
