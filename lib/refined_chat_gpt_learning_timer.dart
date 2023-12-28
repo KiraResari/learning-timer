@@ -36,8 +36,6 @@ class RefinedChatGptLearningTimerState
 
   @override
   Widget build(BuildContext context) {
-    String formattedTime = _formatDuration(_currentDuration);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Learning Timer'),
@@ -46,47 +44,79 @@ class RefinedChatGptLearningTimerState
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              formattedTime,
-              style: TextStyle(
-                fontSize: 36,
-                color: _currentDuration.isNegative ? Colors.red : Colors.black,
-              ),
-            ),
+            _buildTimerDisplay(),
             const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    _toggleCountDirection(true);
-                  },
-                  child: const Text('Count Up'),
-                ),
-                const SizedBox(width: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    _toggleCountDirection(false);
-                  },
-                  child: const Text('Count Down'),
-                ),
-                const SizedBox(width: 20),
-                ElevatedButton(
-                  onPressed: _isTimerRunning ? _startStopTimer : null,
-                  child: const Text('Stop'),
-                ),
-                const SizedBox(width: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    _resetTimer();
-                  },
-                  child: const Text('Reset'),
-                ),
-              ],
-            ),
+            _buildButtons(),
           ],
         ),
       ),
+    );
+  }
+
+  Text _buildTimerDisplay() {
+    String formattedTime = _formatDuration(_currentDuration);
+    return Text(
+      formattedTime,
+      style: TextStyle(
+        fontSize: 36,
+        color: _currentDuration.isNegative ? Colors.red : Colors.black,
+      ),
+    );
+  }
+
+  Row _buildButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildCountUpButton(),
+        const SizedBox(width: 20),
+        _buildCountDownButton(),
+        const SizedBox(width: 20),
+        _buildStopButton(),
+        const SizedBox(width: 20),
+        _buildResetButton(),
+      ],
+    );
+  }
+
+  ElevatedButton _buildResetButton() {
+    return ElevatedButton(
+      onPressed: () => _resetTimer(),
+      child: const Text('Reset'),
+    );
+  }
+
+  void _resetTimer() {
+    setState(() {
+      _currentDuration = Duration.zero;
+      _isTimerRunning = false;
+    });
+  }
+
+  ElevatedButton _buildStopButton() {
+    return ElevatedButton(
+      onPressed: _isTimerRunning ? _startStopTimer : null,
+      child: const Text('Stop'),
+    );
+  }
+
+  void _startStopTimer() {
+    setState(() {
+      _isTimerRunning = !_isTimerRunning;
+    });
+  }
+
+  ElevatedButton _buildCountDownButton() {
+    return ElevatedButton(
+      onPressed: () => _toggleCountDirection(false),
+      child: const Text('Count Down'),
+    );
+  }
+
+  ElevatedButton _buildCountUpButton() {
+    return ElevatedButton(
+      onPressed: () => _toggleCountDirection(true),
+      child: const Text('Count Up'),
     );
   }
 
@@ -100,19 +130,6 @@ class RefinedChatGptLearningTimerState
         _isCountingUp = countUp;
         _startStopTimer();
       }
-    });
-  }
-
-  void _startStopTimer() {
-    setState(() {
-      _isTimerRunning = !_isTimerRunning;
-    });
-  }
-
-  void _resetTimer() {
-    setState(() {
-      _currentDuration = Duration.zero;
-      _isTimerRunning = false;
     });
   }
 
