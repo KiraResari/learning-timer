@@ -12,6 +12,15 @@ class _BardLearningTimerState extends State<BardLearningTimer> {
   String _timerDisplay = '00:00:00';
   bool _isCountingUp = true;
 
+  _BardLearningTimerState() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        _currentDuration += const Duration(seconds: 1);
+        _timerDisplay = _formatTimerDuration(_currentDuration);
+      });
+    });
+  }
+
   void _startTimer() {
     if (_timer != null) {
       _timer.cancel();
@@ -24,7 +33,7 @@ class _BardLearningTimerState extends State<BardLearningTimer> {
           if (_isCountingUp && _currentDuration.isNegative) {
             _currentDuration = Duration.zero;
             _timer.cancel();
-          } else if (!_isCountingUp && _currentDuration.inMilliseconds == 0) {
+          } else if (!_isCountingUp && _currentDuration == Duration.zero) {
             _timer.cancel();
           } else {
             _currentDuration = _isCountingUp ? _currentDuration + const Duration(seconds: 1) : _currentDuration - const Duration(seconds: 1);

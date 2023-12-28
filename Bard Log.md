@@ -386,3 +386,119 @@ One compile error, and an app that has all 4 specified buttons, but runtime erro
 * The timer is displayed in the correct format (hh:mm:ss)
 
   
+
+# Round 3
+
+## Prompt
+
+The code you sent me has the following problems. Could you please go over them and correct them?
+
+* `_currentDuration.isZero` is undefined ("The getter 'isZero' isn't defined for the type 'Duration'.")
+
+* The following null-aware operator is redundant `_timer?.cancel()` ("The receiver can't be null, so the null-aware operator '?.' is unnecessary. ")
+
+* When clicking any of the four buttons, the following runtime exception occurs, most likely because the `_timer` field was not initialized
+
+  * ````
+    LateInitializationError: Field '_timer@19499484' has not been initialized.
+    ````
+
+## Response
+
+The provided code still has a few issues that need to be addressed:
+
+
+
+1. 
+
+2. The `isZero` method is not available for the `Duration` class. It should be `Duration.zero`:
+3. 
+
+
+
+Dart
+
+```
+if (_currentDuration == Duration.zero) {
+  // ...
+}
+```
+
+ Use code with caution. [Learn more](https://bard.google.com/faq#coding)
+
+
+
+1. 
+
+2. The `_timer` field is not initialized in the constructor, which is causing the `LateInitializationError`. To initialize it, add the following code to the constructor:
+3. 
+
+
+
+Dart
+
+```
+late Timer _timer;
+
+LearningTimerApp() {
+  _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    setState(() {
+      _currentDuration += const Duration(seconds: 1);
+      _timerDisplay = _formatTimerDuration(_currentDuration);
+    });
+  });
+}
+```
+
+ Use code with caution. [Learn more](https://bard.google.com/faq#coding)
+
+
+
+1. 
+
+2. The `_stopTimer` function should also check if the timer is running and update the timer display accordingly:
+3. 
+
+
+
+Dart
+
+```
+void _stopTimer() {
+  if (_timer != null) {
+    _timer.cancel();
+
+    setState(() {
+      _currentDuration = _isCountingUp ? _currentDuration : Duration.zero;
+      _timerDisplay = _formatTimerDuration(_currentDuration);
+    });
+  }
+}
+```
+
+ Use code with caution. [Learn more](https://bard.google.com/faq#coding)
+
+
+
+With these changes, the code should function correctly and avoid the `LateInitializationError`.
+
+## Result
+
+Since it did not provide me the full code anymore, I had to puzzle together what it meant.
+
+### Compile issues
+
+* Still several redundant checks for `_timer != null` ("The operand can't be null, so the condition is always true. ")
+  * These were also present in the previous round, but I missed them
+
+### Program issues
+
+* App starts with timer running
+* The timer can't display negative numbers, and simply stops when reaching 0
+
+### Notable working things
+
+* All 4 buttons are present
+* Stopping works
+* Resetting works
+* Counting up works

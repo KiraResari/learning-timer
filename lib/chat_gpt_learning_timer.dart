@@ -26,11 +26,6 @@ class _ChatGptLearningTimerState extends State<ChatGptLearningTimer> {
         } else {
           _currentDuration -= Duration(seconds: 1);
         }
-
-        if (_currentDuration.isNegative) {
-          _currentDuration = Duration.zero;
-          _isTimerRunning = false;
-        }
       });
     }
   }
@@ -45,6 +40,15 @@ class _ChatGptLearningTimerState extends State<ChatGptLearningTimer> {
     setState(() {
       _currentDuration = Duration.zero;
       _isTimerRunning = false;
+    });
+  }
+
+  void _toggleCountDirection() {
+    setState(() {
+      _isCountingUp = !_isCountingUp;
+      if (!_isTimerRunning) {
+        _startStopTimer();
+      }
     });
   }
 
@@ -80,32 +84,21 @@ class _ChatGptLearningTimerState extends State<ChatGptLearningTimer> {
                 ElevatedButton(
                   onPressed: () {
                     setState(() {
-                      _isCountingUp = true;
-                      _startStopTimer();
+                      _toggleCountDirection();
                     });
                   },
-                  child: Text('Count Up'),
+                  child: Text(_isCountingUp ? 'Count Up' : 'Count Down'),
                 ),
                 SizedBox(width: 20),
                 ElevatedButton(
                   onPressed: () {
                     setState(() {
-                      _isCountingUp = false;
-                      _startStopTimer();
+                      _toggleCountDirection();
                     });
                   },
-                  child: Text('Count Down'),
+                  child: Text('Stop'),
                 ),
               ],
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  _startStopTimer();
-                });
-              },
-              child: Text(_isTimerRunning ? 'Stop' : 'Start'),
             ),
             SizedBox(height: 20),
             ElevatedButton(
@@ -123,7 +116,7 @@ class _ChatGptLearningTimerState extends State<ChatGptLearningTimer> {
   }
 
   String _formatDuration(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    String twoDigits(int n) => n.abs().toString().padLeft(2, '0');
     String formattedTime =
         '${duration.inHours}:${twoDigits(duration.inMinutes.remainder(60))}:${twoDigits(duration.inSeconds.remainder(60))}';
     return duration.isNegative ? '-$formattedTime' : formattedTime;
