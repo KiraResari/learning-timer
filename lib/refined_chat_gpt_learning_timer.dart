@@ -12,8 +12,7 @@ class RefinedChatGptLearningTimer extends StatefulWidget {
 class RefinedChatGptLearningTimerState
     extends State<RefinedChatGptLearningTimer> {
   Duration _currentDuration = Duration.zero;
-  bool _isCountingUp = true;
-  bool _isTimerRunning = false;
+  int _timerStep = 0;
   late Timer _timer;
 
   @override
@@ -23,15 +22,9 @@ class RefinedChatGptLearningTimerState
   }
 
   void _updateTimer(Timer timer) {
-    if (_isTimerRunning) {
-      setState(() {
-        if (_isCountingUp) {
-          _currentDuration += const Duration(seconds: 1);
-        } else {
-          _currentDuration -= const Duration(seconds: 1);
-        }
-      });
-    }
+    setState(() {
+      _currentDuration += Duration(seconds: _timerStep);
+    });
   }
 
   @override
@@ -89,47 +82,50 @@ class RefinedChatGptLearningTimerState
   void _resetTimer() {
     setState(() {
       _currentDuration = Duration.zero;
-      _isTimerRunning = false;
+      _stopTimer();
     });
   }
 
   ElevatedButton _buildStopButton() {
     return ElevatedButton(
-      onPressed: _isTimerRunning ? _startStopTimer : null,
+      onPressed: _isTimerRunning() ? _stopTimer : null,
       child: const Text('Stop'),
     );
   }
 
-  void _startStopTimer() {
+  bool _isTimerRunning(){
+    return _timerStep != 0;
+  }
+
+  void _stopTimer() {
     setState(() {
-      _isTimerRunning = !_isTimerRunning;
+      _timerStep = 0;
     });
   }
 
   ElevatedButton _buildCountDownButton() {
     return ElevatedButton(
-      onPressed: () => _toggleCountDirection(false),
+      onPressed: _startCountingDown,
       child: const Text('Count Down'),
     );
   }
 
+  void _startCountingDown(){
+    setState(() {
+      _timerStep = -1;
+    });
+  }
+
   ElevatedButton _buildCountUpButton() {
     return ElevatedButton(
-      onPressed: () => _toggleCountDirection(true),
+      onPressed: _startCountingUp,
       child: const Text('Count Up'),
     );
   }
 
-  void _toggleCountDirection(bool countUp) {
+  void _startCountingUp(){
     setState(() {
-      if (_isTimerRunning) {
-        if (_isCountingUp != countUp) {
-          _isCountingUp = countUp;
-        }
-      } else {
-        _isCountingUp = countUp;
-        _startStopTimer();
-      }
+      _timerStep = 1;
     });
   }
 
