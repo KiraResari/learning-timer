@@ -136,7 +136,7 @@ class RefinedChatGptLearningTimerState
   String _formatDuration(Duration duration) {
     String twoDigits(int n) => n.abs().toString().padLeft(2, '0');
     String formattedTime =
-        '${duration.inHours}:${twoDigits(duration.inMinutes.remainder(60))}:${twoDigits(duration.inSeconds.remainder(60))}';
+        '${twoDigits(duration.inHours)}:${twoDigits(duration.inMinutes.remainder(60))}:${twoDigits(duration.inSeconds.remainder(60))}';
     return duration.isNegative ? '-$formattedTime' : formattedTime;
   }
 
