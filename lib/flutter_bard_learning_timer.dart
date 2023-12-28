@@ -12,27 +12,22 @@ class _FlutterBardLearningTimerState extends State<FlutterBardLearningTimer> {
   bool _isCountingUp = true;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Learning and Relaxation Timer'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "${_currentValue.toString().padLeft(2, '0')}:00:00",
-              style: TextStyle(
-                fontSize: 48,
-                color: _currentValue >= 0 ? Colors.black : Colors.red,
-              ),
-            ),
-            SizedBox(height: 20.0),
-            _buildButtons(),
-          ],
-        ),
-      ),
+  void initState() {
+    super.initState();
+
+    // Start the timer paused
+    _timer = Timer.periodic(
+      const Duration(seconds: 1),
+          (timer) {
+        setState(() {
+          // Update timer value
+          if (_isCountingUp) {
+            _currentValue++;
+          } else {
+            _currentValue--;
+          }
+        });
+      },
     );
   }
 
@@ -74,31 +69,55 @@ class _FlutterBardLearningTimerState extends State<FlutterBardLearningTimer> {
       });
 
       _timer?.cancel();
-      _startTimer(_currentValue);
+      _timer = Timer.periodic(
+        const Duration(seconds: 1),
+            (timer) {
+          setState(() {
+            _currentValue--;
+          });
+        },
+      );
     } else {
       setState(() {
         _isCountingUp = true;
       });
 
       _timer?.cancel();
-      _startTimer(_currentValue);
+      _timer = Timer.periodic(
+        const Duration(seconds: 1),
+            (timer) {
+          setState(() {
+            _currentValue++;
+          });
+        },
+      );
     }
   }
 
-  Widget _buildButtons() {
+  void _buildButtons() {
     List<Widget> buttons = [];
 
     if (_timer == null) {
-      buttons.add(_buildButton('Start', () => _startTimer(0),
+      buttons.add(ElevatedButton(
+        onPressed: _startTimer(0),
+        child: Text('Count Up'),
       ));
-      buttons.add(_buildButton('Count Up', () => _startTimer(_currentValue),
+      buttons.add(ElevatedButton(
+        onPressed: _countDown,
+        child: Text('Count Down'),
       ));
-      buttons.add(_buildButton('Count Down', () => _countDown,
+      buttons.add(ElevatedButton(
+        onPressed: _stopTimer,
+        child: Text('Stop'),
       ));
-      buttons.add(_buildButton('Reset', () => _resetTimer,
+      buttons.add(ElevatedButton(
+        onPressed: _resetTimer,
+        child: Text('Reset'),
       ));
     } else {
-      buttons.add(_buildButton('Stop', () => _stopTimer,
+      buttons.add(ElevatedButton(
+        onPressed: _stopTimer,
+        child: Text('Pause'),
       ));
     }
 
