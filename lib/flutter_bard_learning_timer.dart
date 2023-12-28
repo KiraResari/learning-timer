@@ -1,43 +1,37 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-class FlutterBardLearningTimer extends StatelessWidget {
+class FlutterBardLearningTimer extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Learning and Relaxation Timer'),
-        ),
-        body: Center(
-          child: TimerAppState(),
-        ),
-      ),
-    );
-  }
+  _FlutterBardLearningTimerState createState() => _FlutterBardLearningTimerState();
 }
 
-class TimerAppState extends State<TimerAppState> {
+class _FlutterBardLearningTimerState extends State<FlutterBardLearningTimer> {
   Timer? _timer;
   int _currentValue = 0;
   bool _isCountingUp = true;
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            "${_currentValue.toString().padLeft(2, '0')}:00:00",
-            style: TextStyle(
-              fontSize: 48,
-              color: _currentValue >= 0 ? Colors.black : Colors.red,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Learning and Relaxation Timer'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "${_currentValue.toString().padLeft(2, '0')}:00:00",
+              style: TextStyle(
+                fontSize: 48,
+                color: _currentValue >= 0 ? Colors.black : Colors.red,
+              ),
             ),
-          ),
-          SizedBox(height: 20.0),
-          _buildButtons(),
-        ],
+            SizedBox(height: 20.0),
+            _buildButtons(),
+          ],
+        ),
       ),
     );
   }
@@ -48,7 +42,7 @@ class TimerAppState extends State<TimerAppState> {
       _isCountingUp = true;
     });
 
-    _timer!.cancel();
+    _timer?.cancel();
     _timer = Timer.periodic(
       const Duration(seconds: 1),
           (timer) {
@@ -75,17 +69,23 @@ class TimerAppState extends State<TimerAppState> {
 
   void _countDown() {
     if (_isCountingUp) {
-      _isCountingUp = false;
-      _timer!.cancel();
+      setState(() {
+        _isCountingUp = false;
+      });
+
+      _timer?.cancel();
       _startTimer(_currentValue);
     } else {
-      _isCountingUp = true;
-      _timer!.cancel();
+      setState(() {
+        _isCountingUp = true;
+      });
+
+      _timer?.cancel();
       _startTimer(_currentValue);
     }
   }
 
-  void _buildButtons() {
+  Widget _buildButtons() {
     List<Widget> buttons = [];
 
     if (_timer == null) {
