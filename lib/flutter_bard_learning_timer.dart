@@ -1,13 +1,14 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
+
+import 'package:flutter/material.dart';
 
 class FlutterBardLearningTimer extends StatefulWidget {
   @override
-  _TimerAppState createState() => _TimerAppState();
+  _FlutterBardLearningTimerState createState() => _FlutterBardLearningTimerState();
 }
 
-class _TimerAppState extends State<FlutterBardLearningTimer> {
-  late Timer _timer;
+class _FlutterBardLearningTimerState extends State<FlutterBardLearningTimer> {
+  Timer? _timer;
   int _currentValue = 0;
   bool _isCountingUp = true;
 
@@ -15,20 +16,14 @@ class _TimerAppState extends State<FlutterBardLearningTimer> {
   void initState() {
     super.initState();
 
-    // Initialize timer to 0
+    // Start the timer paused
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
-        // Update timer value based on count direction
+        // Update timer value
         if (_isCountingUp) {
           _currentValue++;
         } else {
           _currentValue--;
-        }
-
-        // Check if timer has reached 0
-        if (_currentValue == 0 && !_isCountingUp) {
-          // Stop timer if count down is complete
-          _timer.cancel();
         }
       });
     });
@@ -59,7 +54,7 @@ class _TimerAppState extends State<FlutterBardLearningTimer> {
 
   void _stopTimer() {
     // Stop the timer
-    _timer.cancel();
+    _timer!.cancel();
   }
 
   void _resetTimer() {
@@ -67,7 +62,7 @@ class _TimerAppState extends State<FlutterBardLearningTimer> {
     setState(() {
       _currentValue = 0;
       _isCountingUp = true;
-      _timer.cancel();
+      _timer?.cancel();
     });
   }
 
@@ -91,50 +86,37 @@ class _TimerAppState extends State<FlutterBardLearningTimer> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Learning and Relaxation Timer'),
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "${_currentValue.toString().padLeft(2, '0')}:00:00",
-                style: TextStyle(
-                  fontSize: 48,
-                  color: _currentValue >= 0 ? Colors.black : Colors.red,
-                ),
-              ),
-              SizedBox(height: 20.0),
-              _buildButtons(),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildButtons() {
+  void _buildButtons() {
     List<Widget> buttons = [];
 
     if (_timer == null) {
-      buttons.add(_buildButton('Start', _startTimer));
-      buttons.add(_buildButton('Reset', _resetTimer));
-      buttons.add(_buildButton('Count Down', _countDown));
+      buttons.add(
+        _buildButton('Start', () => _startTimer(0),
+        ),
+      );
+      buttons.add(
+        _buildButton('Count Up', () => _startTimer(_currentValue),
+        ),
+      );
+      buttons.add(
+        _buildButton('Count Down', () => _countDown,
+        ),
+      );
+      buttons.add(
+        _buildButton('Reset', () => _resetTimer,
+        ),
+      );
     } else {
-      buttons.add(_buildButton('Stop', _stopTimer));
+      buttons.add(_buildButton('Stop', () => _stopTimer),
+      );
     }
 
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: buttons);
   }
 
-  Widget _buildButton(String text, Function onPressed) {
+  Widget _buildButton(String text, VoidCallback onPressed) {
     return ElevatedButton(
-      onPressed: () => onPressed,
+      onPressed: onPressed,
       child: Text(text),
     );
   }
