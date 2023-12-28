@@ -1,6 +1,6 @@
 # Learning Timer
 
-A learning project where I experiment with generative AI to create a  flutter app, comparing ChatGPT (Version 3.5) and Bard (Version 2023.12.18), seeing what results I get from  the same input prompt, and how many corrections are required to get the desired result.
+A learning project where I experiment with generative AI to create a  flutter app, comparing ChatGPT (Version 3.5) and Bard (PaLM2), seeing what results I get from  the same input prompt, and how many corrections are required to get the desired result.
 
 I am going to include two log files to keep track of my prompts.
 

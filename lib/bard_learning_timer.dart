@@ -1,46 +1,38 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 class BardLearningTimer extends StatefulWidget {
-  const BardLearningTimer({super.key});
-
   @override
-  BardLearningTimerState createState() => BardLearningTimerState();
+  _BardLearningTimerState createState() => _BardLearningTimerState();
 }
 
-class BardLearningTimerState extends State<BardLearningTimer> {
+class _BardLearningTimerState extends State<BardLearningTimer> {
   late Timer _timer;
   Duration _currentDuration = Duration.zero;
   String _timerDisplay = '00:00:00';
   bool _isCountingUp = true;
 
   void _startTimer() {
+    if (_timer != null) {
+      _timer.cancel();
+    }
 
-    if (_isCountingUp) {
-      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(
+      const Duration(seconds: 1),
+          (timer) {
         setState(() {
-          if (_currentDuration.isNegative) {
+          if (_isCountingUp && _currentDuration.isNegative) {
             _currentDuration = Duration.zero;
             _timer.cancel();
-          } else {
-            _currentDuration += const Duration(seconds: 1);
-            _timerDisplay = _formatTimerDuration(_currentDuration);
-          }
-        });
-      });
-    } else {
-      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-        setState(() {
-          if (_currentDuration.inMilliseconds == 0) {
+          } else if (!_isCountingUp && _currentDuration.inMilliseconds == 0) {
             _timer.cancel();
           } else {
-            _currentDuration -= const Duration(seconds: 1);
+            _currentDuration = _isCountingUp ? _currentDuration + const Duration(seconds: 1) : _currentDuration - const Duration(seconds: 1);
             _timerDisplay = _formatTimerDuration(_currentDuration);
           }
         });
-      });
-    }
+      },
+    );
   }
 
   void _resetTimer() {
@@ -48,7 +40,25 @@ class BardLearningTimerState extends State<BardLearningTimer> {
       _currentDuration = Duration.zero;
       _timerDisplay = '00:00:00';
       _isCountingUp = true;
-      _timer?.cancel();
+      _timer.cancel();
+    });
+  }
+
+  void _countDown() {
+    setState(() {
+      _isCountingUp = false;
+    });
+    _startTimer();
+  }
+
+  void _stopTimer() {
+    if (_timer != null) {
+      _timer.cancel();
+    }
+
+    setState(() {
+      _currentDuration = _isCountingUp ? _currentDuration : Duration.zero;
+      _timerDisplay = _formatTimerDuration(_currentDuration);
     });
   }
 
@@ -85,6 +95,14 @@ class BardLearningTimerState extends State<BardLearningTimer> {
                   ElevatedButton(
                     onPressed: _startTimer,
                     child: Text(_isCountingUp ? 'Start Counting Up' : 'Start Counting Down'),
+                  ),
+                  ElevatedButton(
+                    onPressed: _countDown,
+                    child: Text('Count Down'),
+                  ),
+                  ElevatedButton(
+                    onPressed: _stopTimer,
+                    child: Text('Stop'),
                   ),
                   ElevatedButton(
                     onPressed: _resetTimer,

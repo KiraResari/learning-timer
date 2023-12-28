@@ -1,15 +1,12 @@
+import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-
 class ChatGptLearningTimer extends StatefulWidget {
-  const ChatGptLearningTimer({super.key});
-
   @override
-  ChatGptLearningTimerState createState() => ChatGptLearningTimerState();
+  _ChatGptLearningTimerState createState() => _ChatGptLearningTimerState();
 }
 
-class ChatGptLearningTimerState extends State<ChatGptLearningTimer> {
+class _ChatGptLearningTimerState extends State<ChatGptLearningTimer> {
   Duration _currentDuration = Duration.zero;
   bool _isCountingUp = true;
   bool _isTimerRunning = false;
@@ -22,13 +19,20 @@ class ChatGptLearningTimerState extends State<ChatGptLearningTimer> {
   }
 
   void _updateTimer(Timer timer) {
-    setState(() {
-      if (_isCountingUp) {
-        _currentDuration += Duration(seconds: 1);
-      } else {
-        _currentDuration -= Duration(seconds: 1);
-      }
-    });
+    if (_isTimerRunning) {
+      setState(() {
+        if (_isCountingUp) {
+          _currentDuration += Duration(seconds: 1);
+        } else {
+          _currentDuration -= Duration(seconds: 1);
+        }
+
+        if (_currentDuration.isNegative) {
+          _currentDuration = Duration.zero;
+          _isTimerRunning = false;
+        }
+      });
+    }
   }
 
   void _startStopTimer() {
@@ -41,7 +45,6 @@ class ChatGptLearningTimerState extends State<ChatGptLearningTimer> {
     setState(() {
       _currentDuration = Duration.zero;
       _isTimerRunning = false;
-      _isCountingUp = true;
     });
   }
 
@@ -96,27 +99,22 @@ class ChatGptLearningTimerState extends State<ChatGptLearningTimer> {
               ],
             ),
             SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      _startStopTimer();
-                    });
-                  },
-                  child: Text(_isTimerRunning ? 'Stop' : 'Start'),
-                ),
-                SizedBox(width: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      _resetTimer();
-                    });
-                  },
-                  child: Text('Reset'),
-                ),
-              ],
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _startStopTimer();
+                });
+              },
+              child: Text(_isTimerRunning ? 'Stop' : 'Start'),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _resetTimer();
+                });
+              },
+              child: Text('Reset'),
             ),
           ],
         ),
@@ -126,10 +124,8 @@ class ChatGptLearningTimerState extends State<ChatGptLearningTimer> {
 
   String _formatDuration(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, '0');
-    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
     String formattedTime =
-        '${duration.inHours}:${twoDigitMinutes}:${twoDigitSeconds}';
+        '${duration.inHours}:${twoDigits(duration.inMinutes.remainder(60))}:${twoDigits(duration.inSeconds.remainder(60))}';
     return duration.isNegative ? '-$formattedTime' : formattedTime;
   }
 }
