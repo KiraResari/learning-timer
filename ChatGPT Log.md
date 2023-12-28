@@ -745,3 +745,171 @@ The buttons work perfectly now, but the timer again stops counting down at 0 and
 ### Program issues
 
 * The timer can't display negative numbers anymore, and simply stops when reaching 0
+
+# Round 5
+
+## Prompt
+
+Almost there! The buttons now work as intended. However, now the timer can't display negative numbers anymore, and simply stops when reaching 0. It should count downwards into the negative numbers, with the time being displayed in the format `-hh:mm:ss` (e.g. `-00:00:53` or `-00:01:40`). This already worked in the version before this one. Can you please fix that while keeping the functionality of the buttons as it presently is?
+
+## Response
+
+Certainly! I appreciate your patience. I've made the necessary adjustments to ensure that the timer displays negative numbers correctly while keeping the button functionalities intact. Here's the updated code:
+
+```
+dart
+import 'package:flutter/material.dart';
+import 'dart:async';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Learning Timer',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: LearningTimer(),
+    );
+  }
+}
+
+class LearningTimer extends StatefulWidget {
+  @override
+  _LearningTimerState createState() => _LearningTimerState();
+}
+
+class _LearningTimerState extends State<LearningTimer> {
+  Duration _currentDuration = Duration.zero;
+  bool _isCountingUp = true;
+  bool _isTimerRunning = false;
+  late Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(Duration(seconds: 1), _updateTimer);
+  }
+
+  void _updateTimer(Timer timer) {
+    if (_isTimerRunning) {
+      setState(() {
+        if (_isCountingUp) {
+          _currentDuration += Duration(seconds: 1);
+        } else {
+          _currentDuration -= Duration(seconds: 1);
+        }
+      });
+    }
+  }
+
+  void _startStopTimer() {
+    setState(() {
+      _isTimerRunning = !_isTimerRunning;
+    });
+  }
+
+  void _resetTimer() {
+    setState(() {
+      _currentDuration = Duration.zero;
+      _isTimerRunning = false;
+    });
+  }
+
+  void _toggleCountDirection(bool countUp) {
+    setState(() {
+      if (_isTimerRunning) {
+        if (_isCountingUp != countUp) {
+          _isCountingUp = countUp;
+        }
+      } else {
+        _isCountingUp = countUp;
+        _startStopTimer();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    String formattedTime = _formatDuration(_currentDuration);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Learning Timer'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              formattedTime,
+              style: TextStyle(
+                fontSize: 36,
+                color: _currentDuration.isNegative ? Colors.red : Colors.black,
+              ),
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    _toggleCountDirection(true);
+                  },
+                  child: Text('Count Up'),
+                ),
+                SizedBox(width: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    _toggleCountDirection(false);
+                  },
+                  child: Text('Count Down'),
+                ),
+                SizedBox(width: 20),
+                ElevatedButton(
+                  onPressed: _isTimerRunning ? _startStopTimer : null,
+                  child: Text('Stop'),
+                ),
+                SizedBox(width: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    _resetTimer();
+                  },
+                  child: Text('Reset'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _formatDuration(Duration duration) {
+    String twoDigits(int n) => n.abs().toString().padLeft(2, '0');
+    String formattedTime =
+        '${duration.inHours}:${twoDigits(duration.inMinutes.remainder(60))}:${twoDigits(duration.inSeconds.remainder(60))}';
+    return duration.isNegative ? '-$formattedTime' : formattedTime;
+  }
+}
+```
+
+Now, the timer displays negative numbers correctly while maintaining the desired button functionalities. If you have any further adjustments or questions, feel free to let me know!
+
+## Result
+
+Works perfectly, with the only very slight shortcoming being that the number format is `h:mm:ss` again instead of `hh:mm:ss`, but everything else works as intended.
+
+# Conclusion
+
+ChatGPT was able to create the app I envisioned within 5 rounds.

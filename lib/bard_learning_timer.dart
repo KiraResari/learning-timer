@@ -1,15 +1,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-class LearningTimerApp extends StatefulWidget {
+class BardLearningTimer extends StatefulWidget {
   @override
-  _LearningTimerAppState createState() => _LearningTimerAppState();
+  _BardLearningTimerState createState() => _BardLearningTimerState();
 }
 
-class _LearningTimerAppState extends State<LearningTimerApp> {
+class _BardLearningTimerState extends State<BardLearningTimer> {
   Timer? _timer;
   Duration _currentDuration = Duration.zero;
   bool _isCountingUp = true;
+  String _timerDisplay = "";
 
   @override
   void initState() {
@@ -20,7 +21,7 @@ class _LearningTimerAppState extends State<LearningTimerApp> {
 
   void _startTimer() {
     if (_timer != null) {
-      _timer.cancel();
+      _timer!.cancel();
     }
 
     // Start the timer with the specified direction
@@ -36,12 +37,15 @@ class _LearningTimerAppState extends State<LearningTimerApp> {
 
           // Update the timer display and font color based on the sign
           String timerDisplay = _formatTimerDuration(_currentDuration);
-          if (_currentDuration.isNegative) {
-            timerDisplay = '-${timerDisplay}';
-            Theme.of(context).textTheme.headline4!.color = Colors.red;
-          } else {
-            Theme.of(context).textTheme.headline4!.color = Colors.black;
-          }
+          // Color timerDisplayColor = Colors.black;
+          // if (_currentDuration.isNegative) {
+          //   timerDisplayColor = Colors.red;
+          // }
+          // Theme
+          //     .of(context)
+          //     .textTheme
+          //     .headline4!
+          //     .color = timerDisplayColor;
 
           _timerDisplay = timerDisplay;
         });
@@ -86,26 +90,60 @@ class _LearningTimerAppState extends State<LearningTimerApp> {
       timerDisplay = '-';
     }
 
-    timerDisplay += '<span class="math-inline">\{twoDigits\(duration\.inHours\)\}\:</span>{twoDigits(duration.inMinutes.remainder(60))}:${twoDigits(duration.inSeconds.remainder(60))}';
+    timerDisplay +=
+    '<span class="math-inline">\{twoDigits\(duration\.inHours\)\}\:</span>{twoDigits(duration.inMinutes.remainder(60))}:${twoDigits(
+        duration.inSeconds.remainder(60))}';
 
     return timerDisplay;
   }
 
   @override
   Widget build(BuildContext context) {
+    _timerDisplay = _formatTimerDuration(_currentDuration);
+
     return MaterialApp(
-        home: Scaffold(
+      home: Scaffold(
         appBar: AppBar(
-        title: const Text('Learning Timer'),
-    ),
-    body: Center(
-    child: Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-    Text(
-    _timerDisplay,
-    style: Theme.of(context).textTheme.headline4,
-    ),
-    Row(
-    mainAxisAlignment: MainAxisAlignment.spaceAround,
-    children:
+          title: const Text('Learning Timer'),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                _timerDisplay,
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .headline4,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton(
+                    onPressed: _startTimer,
+                    child: Text(_isCountingUp
+                        ? 'Start Counting Up'
+                        : 'Start Counting Down'),
+                  ),
+                  ElevatedButton(
+                    onPressed: _countDown,
+                    child: Text('Count Down'),
+                  ),
+                  ElevatedButton(
+                    onPressed: _stopTimer,
+                    child: Text('Stop'),
+                  ),
+                  ElevatedButton(
+                    onPressed: _resetTimer,
+                    child: Text('Reset'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

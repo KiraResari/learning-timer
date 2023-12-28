@@ -25,10 +25,6 @@ class _ChatGptLearningTimerState extends State<ChatGptLearningTimer> {
           _currentDuration += Duration(seconds: 1);
         } else {
           _currentDuration -= Duration(seconds: 1);
-          if (_currentDuration.isNegative) {
-            _currentDuration = Duration.zero;
-            _isTimerRunning = false;
-          }
         }
       });
     }
