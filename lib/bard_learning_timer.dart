@@ -1,24 +1,21 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-class BardLearningTimer extends StatefulWidget {
+class LearningTimerApp extends StatefulWidget {
   @override
-  _BardLearningTimerState createState() => _BardLearningTimerState();
+  _LearningTimerAppState createState() => _LearningTimerAppState();
 }
 
-class _BardLearningTimerState extends State<BardLearningTimer> {
-  late Timer _timer;
+class _LearningTimerAppState extends State<LearningTimerApp> {
+  Timer? _timer;
   Duration _currentDuration = Duration.zero;
-  String _timerDisplay = '00:00:00';
   bool _isCountingUp = true;
 
-  _BardLearningTimerState() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        _currentDuration += const Duration(seconds: 1);
-        _timerDisplay = _formatTimerDuration(_currentDuration);
-      });
-    });
+  @override
+  void initState() {
+    super.initState();
+    // Set the timer to null initially
+    _timer = null;
   }
 
   void _startTimer() {
@@ -26,19 +23,27 @@ class _BardLearningTimerState extends State<BardLearningTimer> {
       _timer.cancel();
     }
 
-    _timer = Timer.periodic(
+    // Start the timer with the specified direction
+    _timer = _timer ?? Timer.periodic(
       const Duration(seconds: 1),
           (timer) {
         setState(() {
-          if (_isCountingUp && _currentDuration.isNegative) {
-            _currentDuration = Duration.zero;
-            _timer.cancel();
-          } else if (!_isCountingUp && _currentDuration == Duration.zero) {
-            _timer.cancel();
+          if (_isCountingUp) {
+            _currentDuration += const Duration(seconds: 1);
           } else {
-            _currentDuration = _isCountingUp ? _currentDuration + const Duration(seconds: 1) : _currentDuration - const Duration(seconds: 1);
-            _timerDisplay = _formatTimerDuration(_currentDuration);
+            _currentDuration -= const Duration(seconds: 1);
           }
+
+          // Update the timer display and font color based on the sign
+          String timerDisplay = _formatTimerDuration(_currentDuration);
+          if (_currentDuration.isNegative) {
+            timerDisplay = '-${timerDisplay}';
+            Theme.of(context).textTheme.headline4!.color = Colors.red;
+          } else {
+            Theme.of(context).textTheme.headline4!.color = Colors.black;
+          }
+
+          _timerDisplay = timerDisplay;
         });
       },
     );
@@ -47,9 +52,8 @@ class _BardLearningTimerState extends State<BardLearningTimer> {
   void _resetTimer() {
     setState(() {
       _currentDuration = Duration.zero;
-      _timerDisplay = '00:00:00';
-      _isCountingUp = true;
-      _timer.cancel();
+      _timer?.cancel();
+      _timer = null;
     });
   }
 
@@ -61,13 +65,10 @@ class _BardLearningTimerState extends State<BardLearningTimer> {
   }
 
   void _stopTimer() {
-    if (_timer != null) {
-      _timer.cancel();
-    }
-
     setState(() {
       _currentDuration = _isCountingUp ? _currentDuration : Duration.zero;
-      _timerDisplay = _formatTimerDuration(_currentDuration);
+      _timer?.cancel();
+      _timer = null;
     });
   }
 
@@ -80,49 +81,31 @@ class _BardLearningTimerState extends State<BardLearningTimer> {
       }
     }
 
-    return '${twoDigits(duration.inHours)}:${twoDigits(duration.inMinutes.remainder(60))}:${twoDigits(duration.inSeconds.remainder(60))}';
+    String timerDisplay = '';
+    if (duration.isNegative) {
+      timerDisplay = '-';
+    }
+
+    timerDisplay += '<span class="math-inline">\{twoDigits\(duration\.inHours\)\}\:</span>{twoDigits(duration.inMinutes.remainder(60))}:${twoDigits(duration.inSeconds.remainder(60))}';
+
+    return timerDisplay;
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
+        home: Scaffold(
         appBar: AppBar(
-          title: const Text('Learning Timer'),
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                _timerDisplay,
-                style: Theme.of(context).textTheme.headline4,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  ElevatedButton(
-                    onPressed: _startTimer,
-                    child: Text(_isCountingUp ? 'Start Counting Up' : 'Start Counting Down'),
-                  ),
-                  ElevatedButton(
-                    onPressed: _countDown,
-                    child: Text('Count Down'),
-                  ),
-                  ElevatedButton(
-                    onPressed: _stopTimer,
-                    child: Text('Stop'),
-                  ),
-                  ElevatedButton(
-                    onPressed: _resetTimer,
-                    child: Text('Reset'),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+        title: const Text('Learning Timer'),
+    ),
+    body: Center(
+    child: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+    Text(
+    _timerDisplay,
+    style: Theme.of(context).textTheme.headline4,
+    ),
+    Row(
+    mainAxisAlignment: MainAxisAlignment.spaceAround,
+    children:

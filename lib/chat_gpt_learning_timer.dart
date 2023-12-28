@@ -25,6 +25,10 @@ class _ChatGptLearningTimerState extends State<ChatGptLearningTimer> {
           _currentDuration += Duration(seconds: 1);
         } else {
           _currentDuration -= Duration(seconds: 1);
+          if (_currentDuration.isNegative) {
+            _currentDuration = Duration.zero;
+            _isTimerRunning = false;
+          }
         }
       });
     }
@@ -43,10 +47,14 @@ class _ChatGptLearningTimerState extends State<ChatGptLearningTimer> {
     });
   }
 
-  void _toggleCountDirection() {
+  void _toggleCountDirection(bool countUp) {
     setState(() {
-      _isCountingUp = !_isCountingUp;
-      if (!_isTimerRunning) {
+      if (_isTimerRunning) {
+        if (_isCountingUp != countUp) {
+          _isCountingUp = countUp;
+        }
+      } else {
+        _isCountingUp = countUp;
         _startStopTimer();
       }
     });
@@ -83,31 +91,30 @@ class _ChatGptLearningTimerState extends State<ChatGptLearningTimer> {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    setState(() {
-                      _toggleCountDirection();
-                    });
+                    _toggleCountDirection(true);
                   },
-                  child: Text(_isCountingUp ? 'Count Up' : 'Count Down'),
+                  child: Text('Count Up'),
                 ),
                 SizedBox(width: 20),
                 ElevatedButton(
                   onPressed: () {
-                    setState(() {
-                      _toggleCountDirection();
-                    });
+                    _toggleCountDirection(false);
                   },
+                  child: Text('Count Down'),
+                ),
+                SizedBox(width: 20),
+                ElevatedButton(
+                  onPressed: _isTimerRunning ? _startStopTimer : null,
                   child: Text('Stop'),
                 ),
+                SizedBox(width: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    _resetTimer();
+                  },
+                  child: Text('Reset'),
+                ),
               ],
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  _resetTimer();
-                });
-              },
-              child: Text('Reset'),
             ),
           ],
         ),
