@@ -1,4 +1,6 @@
-# Kira
+# Round 1
+
+## Prompt
 
 Please write me a flutter app that fulfills the following user story and requirements:
 
@@ -13,7 +15,7 @@ Requirements:
 * A button to stop the timer at its current value
 * A button to reset the timer to 00:00:00
 
-# Bard
+## Response
 
 Sure, here is the Flutter app that fulfills the user story and requirements:
 
@@ -138,3 +140,34 @@ This code will create a simple timer app that can be used to track learning and 
 
 1. [ github.com/CalCOFI/OceanView ](https://github.com/CalCOFI/OceanView)
 2. [ github.com/TTigre/SIServer ](https://github.com/TTigre/SIServer)
+
+## Result
+
+Some compile errors, and an app that is missing 2 of the specified 4 buttons, but what is there works nicely.
+
+### Compile Issues
+
+* Library 'dart:async' was not imported
+
+* Declaration `Timer _timer` is invalid ("Non-nullable instance field '_timer' must be initialized.")
+
+* The following code block is redundant ("The operand can't be null, so the condition is always true. ")
+
+  * ````
+        if (_timer != null) {
+          _timer.cancel();
+        }
+    ````
+
+* `_currentDuration.isZero` is undefined ("The getter 'isZero' isn't defined for the type 'Duration'.")
+
+### Program Issues
+
+* There is no button for counting down
+* There is no button to stop the timer
+
+### Notably working things
+
+* App starts with timer stopped
+* Clicking "Reset" stops the timer
+

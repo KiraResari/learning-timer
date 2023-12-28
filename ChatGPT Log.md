@@ -1,4 +1,6 @@
-# Kira
+# Round 1
+
+## Prompt
 
 Please write me a flutter app that fulfills the following user story and requirements:
 
@@ -14,7 +16,7 @@ Requirements:
 * A button to stop the timer at its current value
 * A button to reset the timer to 00:00:00
 
-# ChatGPT
+## Response
 
 Certainly! Below is a simple Flutter app that fulfills the user story and meets the specified requirements:
 
@@ -171,3 +173,24 @@ class _LearningTimerState extends State<LearningTimer> {
 ```
 
 This Flutter app includes a timer that can count up or down, buttons to control the timer, and formatting to display the time in the specified format. It should help you balance learning time with relaxation time. Feel free to customize it further based on your preferences!
+
+## Result
+
+One compile error, and an app that has all 4 specified buttons, but has some bogus behavior.
+
+### Compile Issues
+
+* Library 'dart:async' was not imported
+
+### Program Issues
+
+* App starts with timer running, but the button for stopping the timer reads "Start"
+* Clicking on the "Start" button makes it switch to "Stop", and clicking on "Stop" makes it switch to "Start", but does not stop the timer
+* Clicking "Reset" does not stop the timer
+* When displaying negative time, minuses are displayed in front of each digit, as well as the time in total, and the format does not include leading zeroes (e.g. "-0:00-53" or "-0:-1-40")
+
+### Notably working things
+
+* All 4 buttons are present
+* When the time is negative, it is displayed in red
+
