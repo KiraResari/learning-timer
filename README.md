@@ -22,4 +22,6 @@ I am going to make one commit after each prompt cycle (referred to as Rounds), w
 
 In the end, ChatGPT was able to successfully create the app that I envisioned within 5 rounds, while Bard's responses grew ever more unhelpful and it even started repeating mistakes so that I felt it was not worth continuing after round 5, and called Bard KOed.
 
-I have to add that I did run the ChatGPT test in a context that I primed specifically for flutter, so that might also have affected the outcome. I'll add the priming statement to the `ChatGPT Log.md`
+I have to add that I did run the ChatGPT test in a context that I primed specifically for flutter, so that might also have affected the outcome. I'll add the priming statement to the `ChatGPT Log.md`.
+
+As such, I have also added a Bonus Round where I also primed the Bard context with the same message as the ChatGPT context. The logs for those are in `FlutterBard Log.md`.

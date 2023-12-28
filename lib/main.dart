@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'bard_learning_timer.dart';
 import 'chat_gpt_learning_timer.dart';
+import 'flutter_bard_learning_timer.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ChatGptLearningTimer(),
+      home: FlutterBardLearningTimer(),
     );
   }
 }
