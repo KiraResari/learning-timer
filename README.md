@@ -11,9 +11,9 @@ These logs will follow a pattern of Prompt-Response-Result, where:
 
 * Prompt: The exact prompt I wrote to Bard/ChatGPT
 * Response: The exact response produced by Bard/ChatGPT
-* Result: A description of the result, pointing out compile issues and program issues
+* Result: A description of the result, pointing out compile issues and program issues, as well as things that notably work in contrast to the competitor's version
   * Compile issues: Errors and warnings
     * If there are errors, I will try to fix them in order to be able to run the program and see what the result looks like
   * Program issues: Where the program does not match my expectations
 
-I am going to make one commit after each prompt cycle, which means one update to the Bard version, and one update to the ChatGPT version simultaneously (unless one of those two versions is already perfect).
+I am going to make one commit after each prompt cycle (referred to as Rounds), which means one update to the Bard version, and one update to the ChatGPT version simultaneously (unless one of those two versions is already perfect). Since I may also make additional commits for each rounds as I update these logs, I will additionally include the round number in each commit.
