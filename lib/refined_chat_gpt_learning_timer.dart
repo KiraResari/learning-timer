@@ -41,7 +41,7 @@ class RefinedChatGptLearningTimerState
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildTimerDisplay(),
+            _buildTimerDisplay(context),
             const SizedBox(height: 20),
             _buildButtons(),
           ],
@@ -50,13 +50,16 @@ class RefinedChatGptLearningTimerState
     );
   }
 
-  Text _buildTimerDisplay() {
+  Text _buildTimerDisplay(BuildContext context) {
     String formattedTime = _formatDuration(_currentDuration);
+    ThemeData themeData = Theme.of(context);
     return Text(
       formattedTime,
       style: TextStyle(
         fontSize: 36,
-        color: _currentDuration.isNegative ? Colors.red : Colors.black,
+        color: _currentDuration.isNegative
+            ? Colors.red
+            : themeData.colorScheme.onBackground,
       ),
     );
   }
