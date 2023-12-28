@@ -24,4 +24,4 @@ In the end, ChatGPT was able to successfully create the app that I envisioned wi
 
 I have to add that I did run the ChatGPT test in a context that I primed specifically for flutter, so that might also have affected the outcome. I'll add the priming statement to the `ChatGPT Log.md`.
 
-As such, I have also added a Bonus Round where I also primed the Bard context with the same message as the ChatGPT context. The logs for those are in `FlutterBard Log.md`.
+As such, I also added a Bonus Round where I primed the Bard context with the same message as the ChatGPT context. The logs for those are in `FlutterBard Log.md`. The result was that while the primed FlutterBard lasted 2 rounds longer than its unprimed counterpart, it also regularly returned code that could not be run, until in the end it again started returning the same broken code again, ignoring what I asked it to improve. So FlutterBard is also KOed. 

@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-class FlutterBardLearningTimer extends StatefulWidget {
+class TimerApp extends StatefulWidget {
   @override
-  _FlutterBardLearningTimerState createState() => _FlutterBardLearningTimerState();
+  _TimerAppState createState() => _TimerAppState();
 }
 
-class _FlutterBardLearningTimerState extends State<FlutterBardLearningTimer> {
+class _TimerAppState extends State<TimerApp> {
   Timer? _timer;
   int _currentValue = 0;
   bool _isCountingUp = true;
@@ -99,7 +99,7 @@ class _FlutterBardLearningTimerState extends State<FlutterBardLearningTimer> {
 
     if (_timer == null) {
       buttons.add(ElevatedButton(
-        onPressed: _startTimer(0),
+        onPressed: () => _startTimer(0),
         child: Text('Count Up'),
       ));
       buttons.add(ElevatedButton(
@@ -108,7 +108,7 @@ class _FlutterBardLearningTimerState extends State<FlutterBardLearningTimer> {
       ));
       buttons.add(ElevatedButton(
         onPressed: _stopTimer,
-        child: Text('Stop'),
+        child: Text('Pause'),
       ));
       buttons.add(ElevatedButton(
         onPressed: _resetTimer,
