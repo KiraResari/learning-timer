@@ -11,8 +11,12 @@ class RefinedChatGptLearningTimer extends StatefulWidget {
 
 class RefinedChatGptLearningTimerState
     extends State<RefinedChatGptLearningTimer> {
+  static final _countUpStep = 1;
+  static final _countDownStep = -_countUpStep;
+  static final _pausedStep = 0;
+
   Duration _currentDuration = Duration.zero;
-  int _timerStep = 0;
+  int _timerStep = _pausedStep;
   late Timer _timer;
 
   @override
@@ -72,9 +76,38 @@ class RefinedChatGptLearningTimerState
     );
   }
 
-  ElevatedButton _buildResetButton() {
+  ElevatedButton _buildCountDownButton() {
+    var buttonActive = _timerStep != _countDownStep;
     return ElevatedButton(
-      onPressed: () => _resetTimer(),
+      onPressed: buttonActive ? _startCountingDown : null,
+      child: const Text('Count Down'),
+    );
+  }
+
+  void _startCountingDown() {
+    setState(() {
+      _timerStep = _countDownStep;
+    });
+  }
+
+  ElevatedButton _buildCountUpButton() {
+    var buttonActive = _timerStep != _countUpStep;
+    return ElevatedButton(
+      onPressed: buttonActive ? _startCountingUp : null,
+      child: const Text('Count Up'),
+    );
+  }
+
+  void _startCountingUp() {
+    setState(() {
+      _timerStep = _countUpStep;
+    });
+  }
+
+  ElevatedButton _buildResetButton() {
+    var buttonActive = _currentDuration != Duration.zero;
+    return ElevatedButton(
+      onPressed: buttonActive ? _resetTimer : null,
       child: const Text('Reset'),
     );
   }
@@ -87,45 +120,16 @@ class RefinedChatGptLearningTimerState
   }
 
   ElevatedButton _buildStopButton() {
+    var buttonActive = _timerStep != _pausedStep;
     return ElevatedButton(
-      onPressed: _isTimerRunning() ? _stopTimer : null,
+      onPressed: buttonActive ? _stopTimer : null,
       child: const Text('Stop'),
     );
   }
 
-  bool _isTimerRunning(){
-    return _timerStep != 0;
-  }
-
   void _stopTimer() {
     setState(() {
-      _timerStep = 0;
-    });
-  }
-
-  ElevatedButton _buildCountDownButton() {
-    return ElevatedButton(
-      onPressed: _startCountingDown,
-      child: const Text('Count Down'),
-    );
-  }
-
-  void _startCountingDown(){
-    setState(() {
-      _timerStep = -1;
-    });
-  }
-
-  ElevatedButton _buildCountUpButton() {
-    return ElevatedButton(
-      onPressed: _startCountingUp,
-      child: const Text('Count Up'),
-    );
-  }
-
-  void _startCountingUp(){
-    setState(() {
-      _timerStep = 1;
+      _timerStep = _pausedStep;
     });
   }
 
