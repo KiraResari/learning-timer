@@ -17,3 +17,9 @@ These logs will follow a pattern of Prompt-Response-Result, where:
   * Program issues: Where the program does not match my expectations
 
 I am going to make one commit after each prompt cycle (referred to as Rounds), which means one update to the Bard version, and one update to the ChatGPT version simultaneously (unless one of those two versions is already perfect). Since I may also make additional commits for each rounds as I update these logs, I will additionally include the round number in each commit.
+
+# Conclusion
+
+In the end, ChatGPT was able to successfully create the app that I envisioned within 5 rounds, while Bard's responses grew ever more unhelpful and it even started repeating mistakes so that I felt it was not worth continuing after round 5, and called Bard KOed.
+
+I have to add that I did run the ChatGPT test in a context that I primed specifically for flutter, so that might also have affected the outcome. I'll add the priming statement to the `ChatGPT Log.md`
