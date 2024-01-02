@@ -1,3 +1,4 @@
+![Learning Timer Logo](/assets/images/AppIcon.png)
 # Learning Timer
 
 A learning project where I experiment with generative AI to create a  flutter app, comparing ChatGPT (Version 3.5) and Bard (PaLM2), seeing what results I get from  the same input prompt, and how many corrections are required to get the desired result.
