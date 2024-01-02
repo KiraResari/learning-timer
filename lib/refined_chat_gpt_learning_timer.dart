@@ -11,9 +11,9 @@ class RefinedChatGptLearningTimer extends StatefulWidget {
 
 class RefinedChatGptLearningTimerState
     extends State<RefinedChatGptLearningTimer> {
-  static final _countUpStep = 1;
-  static final _countDownStep = -_countUpStep;
-  static final _pausedStep = 0;
+  static const _countUpStep = 1;
+  static const _countDownStep = -_countUpStep;
+  static const _pausedStep = 0;
 
   Duration _currentDuration = Duration.zero;
   int _timerStep = _pausedStep;
