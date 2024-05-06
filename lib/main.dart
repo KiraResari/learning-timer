@@ -19,6 +19,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.orange,
       ),
+      themeMode: ThemeMode.dark,
+      darkTheme: ThemeData.dark(),
       home: const RefinedChatGptLearningTimer(),
     );
   }
