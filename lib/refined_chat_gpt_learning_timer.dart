@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:async';
+
+import 'package:keymap/keymap.dart';
 
 class RefinedChatGptLearningTimer extends StatefulWidget {
   const RefinedChatGptLearningTimer({super.key});
@@ -33,6 +36,36 @@ class RefinedChatGptLearningTimerState
 
   @override
   Widget build(BuildContext context) {
+    return KeyboardWidget(
+      bindings: [
+        KeyAction(
+          LogicalKeyboardKey.arrowUp,
+          "Count Up",
+          () {
+            _startCountingUp();
+          },
+        ),
+        KeyAction(
+          LogicalKeyboardKey.arrowDown,
+          "Count Down",
+          () => _startCountingDown(),
+        ),
+        KeyAction(
+          LogicalKeyboardKey.pause,
+          "Pause Timer",
+          () => _stopTimer(),
+        ),
+        KeyAction(
+          LogicalKeyboardKey.delete,
+          "Reset Timer",
+          () => _resetTimer(),
+        ),
+      ],
+      child: _buildScaffold(context),
+    );
+  }
+
+  Widget _buildScaffold(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Learning Timer'),
@@ -83,7 +116,7 @@ class RefinedChatGptLearningTimerState
     var buttonActive = _timerStep != _countDownStep;
     return ElevatedButton(
       onPressed: buttonActive ? _startCountingDown : null,
-      child: const Text('Count Down'),
+      child: const Text('Count Down [🡻]'),
     );
   }
 
@@ -97,7 +130,7 @@ class RefinedChatGptLearningTimerState
     var buttonActive = _timerStep != _countUpStep;
     return ElevatedButton(
       onPressed: buttonActive ? _startCountingUp : null,
-      child: const Text('Count Up'),
+      child: const Text('Count Up [🡹]'),
     );
   }
 
@@ -111,7 +144,7 @@ class RefinedChatGptLearningTimerState
     var buttonActive = _currentDuration != Duration.zero;
     return ElevatedButton(
       onPressed: buttonActive ? _resetTimer : null,
-      child: const Text('Reset'),
+      child: const Text('Reset [Del]'),
     );
   }
 
@@ -126,7 +159,7 @@ class RefinedChatGptLearningTimerState
     var buttonActive = _timerStep != _pausedStep;
     return ElevatedButton(
       onPressed: buttonActive ? _stopTimer : null,
-      child: const Text('Stop'),
+      child: const Text('Pause [Pause]'),
     );
   }
 

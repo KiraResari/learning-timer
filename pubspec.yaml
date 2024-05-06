@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_launcher_icons: ^0.11.0
+  keymap: ^0.0.92
 
 dev_dependencies:
   flutter_test:
