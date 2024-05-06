@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:hotkey_manager/hotkey_manager.dart';
 
 class LearningTimerController extends ChangeNotifier {
   static const _countUpStep = 1;
@@ -13,11 +15,43 @@ class LearningTimerController extends ChangeNotifier {
 
   LearningTimerController() {
     _timer = Timer.periodic(const Duration(seconds: 1), _updateTimer);
+    _registerHotkeys();
   }
 
   void _updateTimer(Timer timer) {
     currentDuration += Duration(seconds: _timerStep);
     notifyListeners();
+  }
+
+  void _registerHotkeys() {
+    hotKeyManager.register(
+      HotKey(
+        key: PhysicalKeyboardKey.arrowUp,
+        modifiers: [HotKeyModifier.control],
+      ),
+      keyDownHandler: (_) => startCountingUp(),
+    );
+    hotKeyManager.register(
+      HotKey(
+        key: PhysicalKeyboardKey.arrowDown,
+        modifiers: [HotKeyModifier.control],
+      ),
+      keyDownHandler: (_) => startCountingDown(),
+    );
+    hotKeyManager.register(
+      HotKey(
+        key: PhysicalKeyboardKey.keyP,
+        modifiers: [HotKeyModifier.control],
+      ),
+      keyDownHandler: (_) => pauseTimer(),
+    );
+    hotKeyManager.register(
+      HotKey(
+        key: PhysicalKeyboardKey.delete,
+        modifiers: [HotKeyModifier.control],
+      ),
+      keyDownHandler: (_) => resetTimer(),
+    );
   }
 
   void startCountingUp() {
@@ -42,8 +76,11 @@ class LearningTimerController extends ChangeNotifier {
   }
 
   bool get isCountDownButtonActive => _timerStep != _countDownStep;
+
   bool get isCountUpButtonActive => _timerStep != _countUpStep;
+
   bool get isPauseButtonActive => _timerStep != _pausedStep;
+
   bool get isResetButtonActive => currentDuration != Duration.zero;
 
   @override

@@ -77,7 +77,25 @@ class LearningTimer extends StatelessWidget {
         context.watch<LearningTimerController>().isCountUpButtonActive;
     return ElevatedButton(
       onPressed: buttonActive ? controller.startCountingUp : null,
-      child: const Text('Count Up'),
+      child: _buildButtonLabel("Count Up", "Ctrl+🡹"),
+    );
+  }
+
+  Widget _buildButtonLabel(String text, String shortcut) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Text(text),
+          Text(
+            "[$shortcut]",
+            style: const TextStyle(
+              fontSize: 12,
+              color: Colors.grey,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -88,7 +106,7 @@ class LearningTimer extends StatelessWidget {
         context.watch<LearningTimerController>().isCountDownButtonActive;
     return ElevatedButton(
       onPressed: buttonActive ? controller.startCountingDown : null,
-      child: const Text('Count Down'),
+      child: _buildButtonLabel("Count Down", "Ctrl+🡻"),
     );
   }
 
@@ -99,7 +117,7 @@ class LearningTimer extends StatelessWidget {
         context.watch<LearningTimerController>().isPauseButtonActive;
     return ElevatedButton(
       onPressed: buttonActive ? controller.pauseTimer : null,
-      child: const Text('Pause'),
+      child: _buildButtonLabel("Pause", "Ctrl+P"),
     );
   }
 
@@ -110,7 +128,7 @@ class LearningTimer extends StatelessWidget {
         context.watch<LearningTimerController>().isResetButtonActive;
     return ElevatedButton(
       onPressed: buttonActive ? controller.resetTimer : null,
-      child: const Text('Reset'),
+      child: _buildButtonLabel("Reset", "Ctrl+Del"),
     );
   }
 }
