@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:learning_timer/refined_chat_gpt_learning_timer.dart';
+import 'package:hotkey_manager/hotkey_manager.dart';
 
 import 'bard_learning_timer.dart';
 import 'chat_gpt_learning_timer.dart';
+import 'refined_chat_gpt_learning_timer.dart';
 import 'flutter_bard_learning_timer.dart';
+import 'learning_timer.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await hotKeyManager.unregisterAll();
   runApp(const MyApp());
 }
 
@@ -21,8 +25,7 @@ class MyApp extends StatelessWidget {
       ),
       themeMode: ThemeMode.dark,
       darkTheme: ThemeData.dark(),
-      home: const RefinedChatGptLearningTimer(),
+      home: const LearningTimer(),
     );
   }
 }
-
